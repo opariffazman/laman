@@ -5,6 +5,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ariff — Trainer</title>
 <style>
+  :root {
+    --ground: #0B1220;
+    --panel:  #111B2E;
+    --bar:    #0E1727;
+    --line:   #22314F;
+    --text:   #DDE5F4;
+    --muted:  #7F8FA9;
+    --amber:  #F2A93B;
+    --live:   #48D597;
+    --mono: ui-monospace, "JetBrains Mono", "Cascadia Code", "SF Mono", Menlo, Consolas, monospace;
+    --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
   body {
@@ -12,104 +25,243 @@
     display: grid;
     place-items: center;
     padding: 24px;
-    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-    background: #0b0d12;
-    background-image:
-      radial-gradient(600px circle at 20% 10%, rgba(56,189,248,.10), transparent 60%),
-      radial-gradient(600px circle at 85% 90%, rgba(168,85,247,.10), transparent 60%);
-    color: #e6e9ef;
+    font-family: var(--sans);
+    color: var(--text);
+    background:
+      radial-gradient(900px circle at 50% -20%, rgba(242,169,59,.08), transparent 60%),
+      radial-gradient(700px circle at 5% 115%, rgba(72,213,151,.05), transparent 60%),
+      var(--ground);
   }
+
+  /* Faint infrastructure grid, drifting very slowly */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: -40px;
+    background-image: radial-gradient(rgba(180,205,255,.14) 1px, transparent 1px);
+    background-size: 26px 26px;
+    opacity: .35;
+    pointer-events: none;
+    animation: hanyut 40s linear infinite;
+  }
+
+  /* ---------- card ---------- */
 
   .kad {
-    width: min(380px, 100%);
-    padding: 40px 32px;
-    text-align: center;
-    background: #12151d;
-    border: 1px solid #232937;
-    border-radius: 20px;
-    box-shadow: 0 24px 60px rgba(0,0,0,.5);
+    position: relative;
+    width: min(420px, 100%);
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 24px 60px rgba(0,0,0,.55);
+    animation: masuk .7s cubic-bezier(.2,.8,.2,1) backwards;
+    transition:
+      transform .45s cubic-bezier(.2,.8,.2,1),
+      border-color .45s ease,
+      box-shadow .45s ease;
   }
 
-  .avatar {
-    width: 92px;
-    height: 92px;
-    margin: 0 auto 20px;
+  .kad:hover {
+    transform: translateY(-6px);
+    border-color: rgba(242,169,59,.45);
+    box-shadow: 0 34px 80px rgba(0,0,0,.65);
+  }
+
+  /* ---------- panel bar ---------- */
+
+  .bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 11px 18px;
+    background: var(--bar);
+    border-bottom: 1px solid var(--line);
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .live {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    color: var(--live);
+  }
+
+  .live i {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--live);
+    box-shadow: 0 0 0 0 rgba(72,213,151,.6);
+    animation: nadi 2.4s ease-out 2.2s infinite;
+  }
+
+  /* ---------- body ---------- */
+
+  .isi { padding: 30px 28px 32px; }
+
+  .tile {
     display: grid;
     place-items: center;
-    border-radius: 50%;
-    font-size: 34px;
+    width: 56px;
+    height: 56px;
+    margin-bottom: 26px;
+    font-family: var(--mono);
+    font-size: 26px;
     font-weight: 700;
-    letter-spacing: 1px;
-    color: #0b0d12;
-    background: linear-gradient(135deg, #38bdf8, #a855f7);
+    color: var(--amber);
+    background: linear-gradient(160deg, #17233A, #0E1727);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    animation: naik .6s cubic-bezier(.2,.8,.2,1) .35s backwards;
+    transition: transform .4s cubic-bezier(.2,.8,.2,1), border-color .4s ease;
   }
 
-  h1 {
-    font-size: 26px;
-    letter-spacing: -.4px;
+  .kad:hover .tile {
+    transform: rotate(-4deg) scale(1.05);
+    border-color: rgba(242,169,59,.5);
+  }
+
+  .prompt {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--muted);
+    animation: naik .5s ease .55s backwards;
+  }
+
+  .prompt .sigil { color: var(--amber); }
+
+  .nama {
+    display: inline-block;
+    box-sizing: content-box;
+    width: 5ch;                 /* "Ariff" */
+    margin-top: 6px;
+    overflow: hidden;
+    white-space: nowrap;
+    font-family: var(--mono);
+    font-size: 36px;
+    font-weight: 700;
+    letter-spacing: -.02em;
+    line-height: 1.25;
+    border-right: 2px solid var(--amber);
+    animation:
+      taip .8s steps(5) .95s backwards,
+      kelip 1.05s step-end 1.75s infinite;
   }
 
   .peranan {
-    margin-top: 6px;
+    margin-top: 4px;
+    font-family: var(--mono);
     font-size: 14px;
-    font-weight: 600;
-    letter-spacing: 1.6px;
-    text-transform: uppercase;
-    color: #38bdf8;
+    color: var(--amber);
+    animation: naik .5s ease 1.8s backwards;
   }
 
-  .garis {
+  .rule {
     height: 1px;
-    margin: 24px 0;
-    background: #232937;
+    margin: 24px 0 20px;
+    background: linear-gradient(90deg, var(--line), rgba(34,49,79,0));
+    transform-origin: left;
+    animation: garis .6s cubic-bezier(.2,.8,.2,1) 1.95s backwards;
   }
 
-  .label {
-    font-size: 11px;
-    letter-spacing: 1.4px;
-    text-transform: uppercase;
-    color: #7b8497;
-  }
+  /* ---------- metadata ---------- */
 
-  .tag {
-    display: inline-block;
-    margin-top: 10px;
-    padding: 7px 16px;
+  .meta {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    row-gap: 14px;
+    column-gap: 20px;
     font-size: 14px;
-    font-weight: 600;
-    color: #7dd3fc;
-    background: rgba(56,189,248,.10);
-    border: 1px solid rgba(56,189,248,.28);
-    border-radius: 999px;
   }
 
-  .fakta {
-    margin-top: 24px;
+  .meta dt {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--muted);
   }
 
-  .fakta p {
-    margin-top: 10px;
-    font-size: 15px;
-    line-height: 1.6;
-    color: #b6bece;
+  .meta dd {
+    justify-self: end;
+    text-align: right;
+  }
+
+  .meta > * { animation: naik .5s ease backwards; }
+  .meta > :nth-child(1), .meta > :nth-child(2) { animation-delay: 2.1s; }
+  .meta > :nth-child(3), .meta > :nth-child(4) { animation-delay: 2.25s; }
+
+  .chip {
+    display: inline-block;
+    padding: 5px 13px;
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--amber);
+    background: rgba(242,169,59,.09);
+    border: 1px solid rgba(242,169,59,.28);
+    border-radius: 8px;
+    transition: background .3s ease, border-color .3s ease, transform .3s ease;
+  }
+
+  .kad:hover .chip {
+    background: rgba(242,169,59,.16);
+    border-color: rgba(242,169,59,.5);
+    transform: translateY(-2px);
+  }
+
+  /* ---------- keyframes ---------- */
+
+  @keyframes masuk { from { opacity: 0; transform: translateY(18px) scale(.97); filter: blur(6px); } }
+  @keyframes naik  { from { opacity: 0; transform: translateY(9px); } }
+  @keyframes taip  { from { width: 0; } to { width: 5ch; } }
+  @keyframes kelip { 50% { border-right-color: transparent; } }
+  @keyframes garis { from { transform: scaleX(0); } }
+  @keyframes hanyut { to { transform: translate(26px, 26px); } }
+  @keyframes nadi {
+    0%   { box-shadow: 0 0 0 0 rgba(72,213,151,.55); }
+    70%  { box-shadow: 0 0 0 9px rgba(72,213,151,0); }
+    100% { box-shadow: 0 0 0 0 rgba(72,213,151,0); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation: none !important;
+      transition-duration: .01ms !important;
+    }
+  }
+
+  @media (max-width: 380px) {
+    .isi { padding: 26px 22px 28px; }
+    .nama { font-size: 30px; }
   }
 </style>
 </head>
 <body>
 
   <main class="kad">
-    <div class="avatar">A</div>
-    <h1>Ariff</h1>
-    <p class="peranan">Trainer</p>
+    <header class="bar">
+      <span>ariff@trainer:~</span>
+      <span class="live"><i></i>aktif</span>
+    </header>
 
-    <div class="garis"></div>
+    <div class="isi">
+      <div class="tile">A</div>
 
-    <p class="label">Kemahiran</p>
-    <span class="tag">DevOps</span>
+      <p class="prompt"><span class="sigil">$</span> whoami</p>
+      <h1 class="nama">Ariff</h1>
+      <p class="peranan">Trainer</p>
 
-    <div class="fakta">
-      <p class="label">Fakta Menarik</p>
-      <p>Seorang ayah. 👨‍👧</p>
+      <div class="rule"></div>
+
+      <dl class="meta">
+        <dt>kemahiran</dt>
+        <dd><span class="chip">DevOps</span></dd>
+        <dt>fakta</dt>
+        <dd>Ayah</dd>
+      </dl>
     </div>
   </main>
 
